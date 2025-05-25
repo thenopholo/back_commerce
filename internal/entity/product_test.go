@@ -9,52 +9,52 @@ import (
 )
 
 func TestNewProduct(t *testing.T) {
-  product, err := NewProduct("Macbook", 1250.99)
+	product, err := NewProduct("Macbook", 1250.99)
 
-  assert.Nil(t, err)
-  assert.NotNil(t, product)
-  assert.NotEmpty(t, product.ID)
-  assert.Equal(t, "Macbook", product.Name)
-  assert.Equal(t, 1250.99, product.Price)
-  assert.NotEmpty(t, product.CretedAt)
+	assert.Nil(t, err)
+	assert.NotNil(t, product)
+	assert.NotEmpty(t, product.ID)
+	assert.Equal(t, "Macbook", product.Name)
+	assert.Equal(t, 1250.99, product.Price)
+	assert.NotEmpty(t, product.CreatedAt)
 }
 
 func TestProductWhenNameIsRequired(t *testing.T) {
-  p, err := NewProduct("", 1250.99)
+	p, err := NewProduct("", 1250.99)
 
-  assert.Nil(t, p)
-  assert.Equal(t, ErrNameIsRequired, err)
+	assert.Nil(t, p)
+	assert.Equal(t, ErrNameIsRequired, err)
 }
 func TestProductWhenPriceIsRequired(t *testing.T) {
-  p, err := NewProduct("Mackbook", 0.0)
+	p, err := NewProduct("Mackbook", 0.0)
 
-  assert.Nil(t, p)
-  assert.Equal(t, ErrPriceIsRequired, err)
+	assert.Nil(t, p)
+	assert.Equal(t, ErrPriceIsRequired, err)
 }
 func TestProductWhenPriceIsNotValid(t *testing.T) {
-  p, err := NewProduct("Mackbook", -1)
+	p, err := NewProduct("Mackbook", -1)
 
-  assert.Nil(t, p)
-  assert.Equal(t, ErrInvalidPrice, err)
+	assert.Nil(t, p)
+	assert.Equal(t, ErrInvalidPrice, err)
 }
 
 func TestValidate(t *testing.T) {
-  p, err := NewProduct("Macbook", 1250.99)
+	p, err := NewProduct("Macbook", 1250.99)
 
-  assert.Nil(t, err)
-  assert.NotNil(t, p)
-  assert.Nil(t, p.Validate())
+	assert.Nil(t, err)
+	assert.NotNil(t, p)
+	assert.Nil(t, p.Validate())
 
 }
 
 func TestProduct_ValidateErrIDIsRequired(t *testing.T) {
-    product := &Product{
-        ID:       entity.ID{},
-        Name:     "Test Product",
-        Price:    10.0,
-        CretedAt: time.Now(),
-    }
+	product := &Product{
+		ID:        entity.ID{},
+		Name:      "Test Product",
+		Price:     10.0,
+		CreatedAt: time.Now(),
+	}
 
-    err := product.Validate()
-    assert.Equal(t, ErrIDIsRequired, err)
+	err := product.Validate()
+	assert.Equal(t, ErrIDIsRequired, err)
 }
