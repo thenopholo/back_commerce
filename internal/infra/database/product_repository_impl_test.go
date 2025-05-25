@@ -1,4 +1,4 @@
-package db
+package database
 
 import (
 	"fmt"
@@ -81,7 +81,6 @@ func TestFindAll(t *testing.T) {
 		assert.Nil(t, err)
 	}
 
-
 	foundProducts, err := productRepo.FindAll(0, 0, "asc")
 	assert.Nil(t, err)
 	assert.Len(t, foundProducts, 3)
@@ -91,7 +90,7 @@ func TestFindAll_WithPagination(t *testing.T) {
 	db := setupTestDB()
 	productRepo := NewProduct(db)
 
-expectedCount := 65
+	expectedCount := 65
 	for i := 1; i <= expectedCount; i++ {
 		product, err := entity.NewProduct(fmt.Sprintf("Product %d", i), rand.Float64()*1000+10)
 		assert.Nil(t, err)
@@ -103,20 +102,20 @@ expectedCount := 65
 	foundProducts, err := productRepo.FindAll(1, 30, "asc")
 	assert.Nil(t, err)
 	assert.Len(t, foundProducts, 30)
-  assert.Equal(t, "Product 1", foundProducts[0].Name)
-  assert.Equal(t, "Product 30", foundProducts[29].Name)
+	assert.Equal(t, "Product 1", foundProducts[0].Name)
+	assert.Equal(t, "Product 30", foundProducts[29].Name)
 
 	foundProducts, err = productRepo.FindAll(2, 30, "asc")
 	assert.Nil(t, err)
 	assert.Len(t, foundProducts, 30)
-  assert.Equal(t, "Product 31", foundProducts[0].Name)
-  assert.Equal(t, "Product 60", foundProducts[29].Name)
+	assert.Equal(t, "Product 31", foundProducts[0].Name)
+	assert.Equal(t, "Product 60", foundProducts[29].Name)
 
 	foundProducts, err = productRepo.FindAll(3, 30, "asc")
 	assert.Nil(t, err)
 	assert.Len(t, foundProducts, 5)
-  assert.Equal(t, "Product 61", foundProducts[0].Name)
-  assert.Equal(t, "Product 65", foundProducts[4].Name)
+	assert.Equal(t, "Product 61", foundProducts[0].Name)
+	assert.Equal(t, "Product 65", foundProducts[4].Name)
 
 }
 

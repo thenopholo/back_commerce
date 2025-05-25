@@ -1,4 +1,4 @@
-package db
+package database
 
 import (
 	"testing"
@@ -10,44 +10,44 @@ import (
 )
 
 func TestCreateUser(t *testing.T) {
-  db, err := gorm.Open(sqlite.Open("file::memory:"), &gorm.Config{})
-  if err != nil {
-    t.Error(err)
-  }
-  db.AutoMigrate(&entity.User{})
+	db, err := gorm.Open(sqlite.Open("file::memory:"), &gorm.Config{})
+	if err != nil {
+		t.Error(err)
+	}
+	db.AutoMigrate(&entity.User{})
 
-  user, _ := entity.NewUser("John Doe", "test@test.com", "123123")
-  userDB := NewUser(db)
+	user, _ := entity.NewUser("John Doe", "test@test.com", "123123")
+	userDB := NewUser(db)
 
-  err = userDB.CreateUser(user)
-  assert.Nil(t, err)
+	err = userDB.CreateUser(user)
+	assert.Nil(t, err)
 
-  var userFound entity.User
-  err = db.First(&userFound, "id = ?", user.ID).Error
-  assert.Nil(t, err)
-  assert.Equal(t, user.ID, userFound.ID)
-  assert.Equal(t, user.Name, userFound.Name)
-  assert.Equal(t, user.Email, userFound.Email)
-  assert.NotNil(t, userFound.Password)
+	var userFound entity.User
+	err = db.First(&userFound, "id = ?", user.ID).Error
+	assert.Nil(t, err)
+	assert.Equal(t, user.ID, userFound.ID)
+	assert.Equal(t, user.Name, userFound.Name)
+	assert.Equal(t, user.Email, userFound.Email)
+	assert.NotNil(t, userFound.Password)
 }
 
 func TestFindUserByEmail(t *testing.T) {
-    db, err := gorm.Open(sqlite.Open("file::memory:"), &gorm.Config{})
-  if err != nil {
-    t.Error(err)
-  }
-  db.AutoMigrate(&entity.User{})
+	db, err := gorm.Open(sqlite.Open("file::memory:"), &gorm.Config{})
+	if err != nil {
+		t.Error(err)
+	}
+	db.AutoMigrate(&entity.User{})
 
-  user, _ := entity.NewUser("John Doe", "test@test.com", "123123")
-  userDB := NewUser(db)
+	user, _ := entity.NewUser("John Doe", "test@test.com", "123123")
+	userDB := NewUser(db)
 
-  err = userDB.CreateUser(user)
-  assert.Nil(t, err)
+	err = userDB.CreateUser(user)
+	assert.Nil(t, err)
 
-  userFound, err := userDB.FindUserByEmail(user.Email)
-  assert.Nil(t, err)
-  assert.Equal(t, user.ID, userFound.ID)
-  assert.Equal(t, user.Name, userFound.Name)
-  assert.Equal(t, user.Email, userFound.Email)
-  assert.NotNil(t, userFound.Password)
+	userFound, err := userDB.FindUserByEmail(user.Email)
+	assert.Nil(t, err)
+	assert.Equal(t, user.ID, userFound.ID)
+	assert.Equal(t, user.Name, userFound.Name)
+	assert.Equal(t, user.Email, userFound.Email)
+	assert.NotNil(t, userFound.Password)
 }
