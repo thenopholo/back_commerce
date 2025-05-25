@@ -42,14 +42,12 @@ func TestFindByID(t *testing.T) {
 	db := setupTestDB()
 	productRepo := NewProduct(db)
 
-	// Criar produto
 	product, err := entity.NewProduct("iPhone 15", 999.99)
 	assert.Nil(t, err)
 
 	err = productRepo.CreateProduct(product)
 	assert.Nil(t, err)
 
-	// Buscar por ID
 	foundProduct, err := productRepo.FindByID(product.ID.String())
 	assert.Nil(t, err)
 	assert.Equal(t, product.ID, foundProduct.ID)
@@ -61,7 +59,6 @@ func TestFindByID_NotFound(t *testing.T) {
 	db := setupTestDB()
 	productRepo := NewProduct(db)
 
-	// Buscar por ID inexistente
 	_, err := productRepo.FindByID("nonexistent-id")
 	assert.NotNil(t, err)
 	assert.Equal(t, gorm.ErrRecordNotFound, err)
@@ -94,7 +91,6 @@ func TestFindAll_WithPagination(t *testing.T) {
 	db := setupTestDB()
 	productRepo := NewProduct(db)
 
-	// Criar 5 produtos
 expectedCount := 65
 	for i := 1; i <= expectedCount; i++ {
 		product, err := entity.NewProduct(fmt.Sprintf("Product %d", i), rand.Float64()*1000+10)
