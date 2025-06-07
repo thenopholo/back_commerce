@@ -8,6 +8,8 @@ import (
 	"github.com/go-chi/jwtauth"
 	"github.com/thenopholo/back_commerce/configs"
 
+	httpSwagger "github.com/swaggo/http-swagger"
+	_ "github.com/thenopholo/back_commerce/docs"
 	"github.com/thenopholo/back_commerce/internal/entity"
 	"github.com/thenopholo/back_commerce/internal/infra/database"
 	"github.com/thenopholo/back_commerce/internal/infra/webserver/handler"
@@ -15,6 +17,23 @@ import (
 	"gorm.io/gorm"
 )
 
+// @title Ecommerce BackEnd
+// @version 1.0
+// @description Product API with authentication
+// @termsOfService http://swagger.io/terms/
+
+// @contact.name Rodrigo Thenopholo
+// @contact.url http://tdnd.com.br
+// @contact.email thenopohlo92@gmail.com
+
+// @license.name TD&D Technology
+// @license.url http://thenopohlo92@gmail.com
+
+// @host localhost:8000
+// @BasePath /
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
 	config, err := configs.LoadConfig(".")
 	if err != nil {
@@ -50,7 +69,9 @@ func main() {
 	})
 
 	r.Post("/users", userHandler.CreateUser)
-	r.Post("/users/generate_token", userHandler.GetJWT)
+	r.Post("/users/login", userHandler.GetJWT)
+
+	r.Get("/docs/*", httpSwagger.Handler(httpSwagger.URL("http://localhost:8000/docs/docs.json")))
 
 	http.ListenAndServe(":8000", r)
 }
