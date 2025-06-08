@@ -290,12 +290,15 @@ const docTemplate = `{
                         "description": "Bad Request"
                     },
                     "500": {
-                        "description": "Internal Server Error"
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.Error"
+                        }
                     }
                 }
             }
         },
-        "/users/login": {
+        "/users/generate_token": {
             "post": {
                 "description": "Generate a JWT token for authenticated user",
                 "consumes": [
@@ -323,17 +326,20 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/dto.GetJWTOutput"
                         }
                     },
-                    "400": {
-                        "description": "Bad Request"
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handler.Error"
+                        }
                     },
-                    "401": {
-                        "description": "Unauthorized"
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.Error"
+                        }
                     }
                 }
             }
@@ -376,6 +382,14 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.GetJWTOutput": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                }
+            }
+        },
         "entity.Product": {
             "type": "object",
             "properties": {
@@ -390,6 +404,14 @@ const docTemplate = `{
                 },
                 "price": {
                     "type": "number"
+                }
+            }
+        },
+        "handler.Error": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
                 }
             }
         }

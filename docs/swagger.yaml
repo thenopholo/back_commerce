@@ -23,6 +23,11 @@ definitions:
       password:
         type: string
     type: object
+  dto.GetJWTOutput:
+    properties:
+      access_token:
+        type: string
+    type: object
   entity.Product:
     properties:
       created_at:
@@ -33,6 +38,11 @@ definitions:
         type: string
       price:
         type: number
+    type: object
+  handler.Error:
+    properties:
+      message:
+        type: string
     type: object
 host: localhost:8000
 info:
@@ -218,10 +228,12 @@ paths:
           description: Bad Request
         "500":
           description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Error'
       summary: Create user
       tags:
       - users
-  /users/login:
+  /users/generate_token:
     post:
       consumes:
       - application/json
@@ -239,13 +251,15 @@ paths:
         "200":
           description: OK
           schema:
-            additionalProperties:
-              type: string
-            type: object
-        "400":
-          description: Bad Request
-        "401":
-          description: Unauthorized
+            $ref: '#/definitions/dto.GetJWTOutput'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Error'
       summary: Get a user JWT token
       tags:
       - users
