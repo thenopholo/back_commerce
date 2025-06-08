@@ -71,7 +71,7 @@ func main() {
 	r.Post("/users", userHandler.CreateUser)
 	r.Post("/users/login", userHandler.GetJWT)
 
-	r.Get("/docs/*", httpSwagger.Handler(httpSwagger.URL("http://localhost:8000/docs/docs.json")))
+	r.Get("/swagger/*", httpSwagger.WrapHandler)
 
 	http.ListenAndServe(":8000", r)
 }
